@@ -86,16 +86,17 @@ function validarLogin() {
     document.getElementById("error").style.display = "none";
 
     if (usuarios[u] && usuarios[u] === p) {
-        // Guardamos el usuario para identificarlo (opcional)
+        // Guardar usuario
         localStorage.setItem("usuarioSN", u);
 
+        // Mostrar bienvenida
         const welcome = document.getElementById("welcome");
         welcome.innerText = "Bienvenido/a " + u + " ✔";
         welcome.style.display = "block";
 
-        // CORRECCIÓN AQUÍ: Cambiamos "minutas.html" por "minuta.html"
+        // REDIRECCIÓN CORREGIDA: Apunta exactamente a minuta.html
         setTimeout(() => {
-            window.location.href = "minuta.html"; 
+            window.location.href = "minuta.html";
         }, 1500);
 
     } else {
