@@ -5,7 +5,7 @@
 <title>Generador de Minutas — SN PROYECTOS</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
-    /* VARIABLES DE COLOR */
+    /* VARIABLES DE COLOR DINÁMICAS */
     :root {
         --bg-color: #f2f4f7;
         --container-bg: #ffffff;
@@ -25,29 +25,31 @@
     }
 
     /* ESTILOS GENERALES */
-    body { font-family: 'Outfit', sans-serif; background: var(--bg-color); color: var(--text-color); margin: 0; padding: 0; transition: 0.3s; }
+    body { font-family: 'Outfit', sans-serif; background: var(--bg-color); color: var(--text-color); margin: 0; padding: 0; transition: background 0.3s, color 0.3s; }
     header { background: var(--primary); color: white; padding: 25px; text-align: center; font-size: 28px; font-weight: 600; box-shadow: 0 2px 6px rgba(0,0,0,0.2); position: relative; }
-    .container { max-width: 900px; margin: 30px auto; background: var(--container-bg); padding: 30px; border-radius: 12px; box-shadow: 0 3px 10px rgba(0,0,0,0.15); }
     
-    h2 { color: var(--primary); border-left: 4px solid var(--primary); padding-left: 10px; margin-top: 30px; font-size: 22px; }
+    .container { max-width: 900px; margin: 30px auto; background: var(--container-bg); padding: 30px; border-radius: 12px; box-shadow: 0 3px 10px rgba(0,0,0,0.15); transition: 0.3s; }
+    
+    h2 { color: var(--primary); border-left: 4px solid var(--primary); padding-left: 10px; margin-top: 30px; font-size: 22px; transition: 0.3s; }
     label { font-weight: 600; }
     
-    input, textarea { width: 100%; padding: 8px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 14px; background: var(--input-bg); color: var(--text-color); margin-bottom: 10px; box-sizing: border-box; }
-    textarea { height: 180px; }
+    input, textarea { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 14px; background: var(--input-bg); color: var(--text-color); margin-bottom: 12px; box-sizing: border-box; transition: 0.3s; }
+    textarea { height: 180px; resize: vertical; }
     
-    button { background: var(--primary); color: white; border: none; padding: 10px 18px; font-size: 15px; border-radius: 6px; cursor: pointer; transition: 0.2s; margin-top: 5px; }
-    button:hover { opacity: 0.9; }
+    button { background: var(--primary); color: white; border: none; padding: 12px 20px; font-size: 15px; border-radius: 6px; cursor: pointer; transition: 0.2s; margin-top: 5px; font-weight: 600; }
+    button:hover { opacity: 0.9; transform: translateY(-1px); }
 
-    /* COMPONENTES NUEVOS */
-    .btn-mode { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.2); border: 1px solid white; padding: 5px 15px; font-size: 12px; }
-    
+    /* BOTÓN MODO OSCURO */
+    .btn-mode { position: absolute; top: 22px; right: 25px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.4); padding: 8px 15px; font-size: 13px; color: white; border-radius: 20px; display: flex; align-items: center; gap: 8px; }
+    .btn-mode:hover { background: rgba(255,255,255,0.25); }
+
+    /* BARRA DE PROGRESO Y ERRORES */
     #progress-container { width: 100%; background: #ddd; border-radius: 10px; height: 8px; margin: 15px 0; display:none; overflow: hidden; }
     #progress-bar { width: 0%; background: #28a745; height: 100%; transition: 0.5s; }
-    
-    .input-error { border: 2px solid #dc3545 !important; background-color: rgba(220, 53, 69, 0.1) !important; }
+    .input-error { border: 2px solid #dc3545 !important; background-color: rgba(220, 53, 69, 0.05) !important; }
 
-    #acumulado { height: 320px; font-family: 'Times New Roman', serif; background: var(--input-bg); line-height: 1.6; }
-    .btn-group { margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap; }
+    #acumulado { height: 320px; font-family: 'Times New Roman', serif; line-height: 1.6; }
+    .btn-group { margin-top: 20px; display: flex; gap: 12px; flex-wrap: wrap; }
     .btn-export { background: #28a745; }
 </style>
 </head>
@@ -55,43 +57,44 @@
 
 <header>
     ⚖️ Generador Automático de Minutas — SN PROYECTOS
-    <button class="btn-mode" onclick="toggleTheme()">🌓 Cambiar Modo</button>
+    <button class="btn-mode" onclick="toggleTheme()" id="theme-btn">🌙 Modo Oscuro</button>
 </header>
 
 <div class="container">
     <div id="progress-container"><div id="progress-bar"></div></div>
 
     <h2>Datos generales del proyecto</h2>
-    <label>PROYECTO:</label><input id="proyecto">
-    <label>DIRECCIÓN:</label><input id="direccion">
+    <label>PROYECTO:</label><input id="proyecto" placeholder="Nombre del proyecto">
+    <label>DIRECCIÓN:</label><input id="direccion" placeholder="Ubicación exacta">
 
     <h2>Datos de la propiedad</h2>
-    <label>PROPIEDAD (Ej: CASA 1-2):</label><input id="propiedad">
-    <label>ÁREA (m²):</label><input id="area">
+    <label>PROPIEDAD (Ej: CASA 1-2):</label><input id="propiedad" placeholder="Identificador de la finca">
+    <label>ÁREA (m²):</label><input id="area" placeholder="Ej: 120.50">
 
     <h2>Estaciones (Medidas y Colindancias)</h2>
     <label>Pegue aquí las líneas de Excel:</label>
-    <textarea id="estacionesTexto" placeholder="1	2	288°0'5&quot;	25.10	ESPACIO AEREO"></textarea>
+    <textarea id="estacionesTexto" placeholder="Ej: 1	2	288°0'5&quot;	25.10	ESPACIO AEREO"></textarea>
 
     <button onclick="generar()">📄 Generar minuta</button>
 
     <h2>Resultado</h2>
-    <textarea id="resultado" readonly></textarea>
+    <textarea id="resultado" readonly placeholder="Aquí aparecerá el texto generado..."></textarea>
     <button onclick="agregarAlDocumento()">➕ Confirmar y agregar al documento</button>
 
-    <hr style="margin-top: 40px; opacity: 0.2;">
+    <hr style="margin-top: 45px; opacity: 0.1;">
 
     <h2>Documento acumulado</h2>
-    <textarea id="acumulado" readonly placeholder="Aquí se irán acumulando las minutas..."></textarea>
+    <textarea id="acumulado" readonly placeholder="Aquí se irán acumulando todas las propiedades confirmadas..."></textarea>
 
     <div class="btn-group">
-        <button onclick="copiarDocumento()">📋 Copiar documento completo</button>
+        <button onclick="copiarDocumento()">📋 Copiar completo</button>
         <button onclick="exportarWord()" class="btn-export">💾 Descargar Word (.doc)</button>
+        <button onclick="limpiarAcumulado()" style="background:#6c757d;">🧹 Limpiar Todo</button>
     </div>
 </div>
 
 <script>
-// --- LÓGICA DE CONVERSIÓN ---
+// --- MOTOR DE CONVERSIÓN ---
 function numeroALetras(num) {
     if (num === '' || num === null || num === undefined) return '';
     let str = num.toString().trim();
@@ -142,8 +145,9 @@ function convertirTexto(texto) {
 }
 
 function generar(){
+    if (!validarCampos()) return;
     let texto = `${convertirTexto(document.getElementById('propiedad').value).toUpperCase()}, ${convertirTexto(document.getElementById('proyecto').value).toUpperCase()} (QUE SI FORMARÁ FINCA FILIAL) Finca nueva de naturaleza urbana, ubicada en ${convertirTexto(document.getElementById('direccion').value)}, con un área total de ${numeroALetras(document.getElementById('area').value)} (${document.getElementById('area').value}) metros cuadrados, y con las siguientes estaciones, medidas y colindancias:\n`;
-    let lineas = document.getElementById('estacionesTexto').value.split(/\n+/);
+    let lineas = document.getElementById('estacionesTexto').value.trim().split(/\n+/);
     lineas.forEach(l=>{
         let p = l.split(/\t+/);
         if(p.length < 5) return;
@@ -162,30 +166,17 @@ function generar(){
     document.getElementById('resultado').value = texto;
 }
 
-// --- FUNCIONES PRO ---
-function agregarAlDocumento() {
-    if (!validarCampos()) {
-        alert("⚠️ Por favor completa los campos resaltados antes de continuar.");
-        return;
-    }
-    const resultado = document.getElementById('resultado');
-    const acumulado = document.getElementById('acumulado');
-    if (!resultado.value.trim()) { alert("⚠️ Genera la minuta primero."); return; }
+// --- FUNCIONES DE INTERFAZ ---
+function toggleTheme() {
+    let theme = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem('theme', theme);
+    updateThemeBtn(theme);
+}
 
-    let separador = acumulado.value.trim() ? "\n\n--------------------------------------------\n\n" : "";
-    acumulado.value += separador + resultado.value;
-    
-    document.getElementById('propiedad').value = "";
-    document.getElementById('area').value = "";
-    document.getElementById('estacionesTexto').value = "";
-    resultado.value = "";
-
-    document.getElementById('progress-container').style.display = 'block';
-    let count = acumulado.value.split('---').length;
-    document.getElementById('progress-bar').style.width = Math.min(count * 10, 100) + "%";
-
-    guardarProgreso();
-    alert("✅ Minuta agregada.");
+function updateThemeBtn(theme) {
+    const btn = document.getElementById('theme-btn');
+    btn.innerHTML = theme === "dark" ? "☀️ Modo Claro" : "🌙 Modo Oscuro";
 }
 
 function validarCampos() {
@@ -199,45 +190,70 @@ function validarCampos() {
     return valido;
 }
 
+function agregarAlDocumento() {
+    const res = document.getElementById('resultado');
+    const acu = document.getElementById('acumulado');
+    if (!res.value) { alert("⚠️ Genera la minuta primero"); return; }
+
+    let sep = acu.value.trim() ? "\n\n--------------------------------------------\n\n" : "";
+    acu.value += sep + res.value;
+    
+    // Limpieza parcial
+    document.getElementById('propiedad').value = "";
+    document.getElementById('area').value = "";
+    document.getElementById('estacionesTexto').value = "";
+    res.value = "";
+
+    // Progreso
+    document.getElementById('progress-container').style.display = 'block';
+    let lineas = acu.value.split('---').length;
+    document.getElementById('progress-bar').style.width = Math.min(lineas * 10, 100) + "%";
+
+    guardarProgreso();
+}
+
 function guardarProgreso() {
-    const datos = {
-        acumulado: document.getElementById('acumulado').value,
-        proyecto: document.getElementById('proyecto').value,
-        direccion: document.getElementById('direccion').value
+    const data = {
+        acu: document.getElementById('acumulado').value,
+        proy: document.getElementById('proyecto').value,
+        dir: document.getElementById('direccion').value
     };
-    localStorage.setItem('minuta_data', JSON.stringify(datos));
+    localStorage.setItem('minuta_sn', JSON.stringify(data));
+}
+
+function limpiarAcumulado() {
+    if(confirm("¿Borrar todo el documento acumulado?")) {
+        document.getElementById('acumulado').value = "";
+        document.getElementById('progress-container').style.display = 'none';
+        guardarProgreso();
+    }
 }
 
 window.onload = function() {
-    const guardado = localStorage.getItem('minuta_data');
-    if (guardado) {
-        const d = JSON.parse(guardado);
-        document.getElementById('acumulado').value = d.acumulado || "";
-        document.getElementById('proyecto').value = d.proyecto || "";
-        document.getElementById('direccion').value = d.direccion || "";
+    const saved = localStorage.getItem('minuta_sn');
+    if (saved) {
+        const d = JSON.parse(saved);
+        document.getElementById('acumulado').value = d.acu || "";
+        document.getElementById('proyecto').value = d.proy || "";
+        document.getElementById('direccion').value = d.dir || "";
     }
-    if (localStorage.getItem('theme') === 'dark') document.documentElement.setAttribute("data-theme", "dark");
+    const theme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute("data-theme", theme);
+    updateThemeBtn(theme);
 };
 
-function toggleTheme() {
-    let theme = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
-    document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem('theme', theme);
-}
-
 function copiarDocumento() {
-    const acumulado = document.getElementById('acumulado');
-    navigator.clipboard.writeText(acumulado.value).then(() => alert("📋 Copiado."));
+    navigator.clipboard.writeText(document.getElementById('acumulado').value).then(() => alert("📋 Copiado al portapapeles"));
 }
 
 function exportarWord() {
     const contenido = document.getElementById("acumulado").value;
-    const encabezado = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'></head><body>`;
-    const html = encabezado + "<div style='font-family:Times New Roman; font-size:12pt; white-space: pre-wrap;'>" + contenido.replace(/</g, "&lt;").replace(/>/g, "&gt;") + "</div></body></html>";
+    if (!contenido) return alert("Documento vacío");
+    const html = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'></head><body><div style='font-family:Times New Roman; font-size:12pt; white-space: pre-wrap;'>${contenido.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div></body></html>`;
     const blob = new Blob(['\ufeff', html], { type: 'application/msword' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
-    link.href = url; link.download = "MINUTAS.doc";
+    link.href = url; link.download = "MINUTA_SN_PROYECTOS.doc";
     link.click();
 }
 </script>
