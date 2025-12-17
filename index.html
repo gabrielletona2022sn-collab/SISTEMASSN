@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Acceso — SN PROYECTOS</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #1a2b49;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+    }
+    .login-box {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        width: 320px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        text-align: center;
+    }
+    h2 {
+        margin-bottom: 20px;
+        color: #1a2b49;
+    }
+    input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 14px;
+    }
+    button {
+        width: 100%;
+        padding: 10px;
+        background: #1a2b49;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 15px;
+        cursor: pointer;
+    }
+    button:hover {
+        background: #223b63;
+    }
+    .error {
+        color: red;
+        margin-top: 10px;
+        display: none;
+    }
+    .welcome {
+        color: green;
+        margin-top: 15px;
+        font-weight: bold;
+        display: none;
+    }
+</style>
+</head>
+<body>
+
+<div class="login-box">
+    <h2>🔐 Acceso SN PROYECTOS</h2>
+    <input type="text" id="usuario" placeholder="Usuario">
+    <input type="password" id="password" placeholder="Contraseña">
+    <button onclick="validarLogin()">Entrar</button>
+    <div id="error" class="error">Usuario o contraseña incorrectos</div>
+    <div id="welcome" class="welcome"></div>
+</div>
+
+<script>
+function validarLogin() {
+    const usuarios = {
+        "ADRIANA": "1234",
+        "JUAN": "27676",
+        "DAVID": "13132",
+        "MELANY": "0987",
+        "GABRIEL": "1311"
+    };
+
+    const u = document.getElementById("usuario").value.trim().toUpperCase();
+    const p = document.getElementById("password").value.trim();
+
+    document.getElementById("error").style.display = "none";
+
+    if (usuarios[u] && usuarios[u] === p) {
+        // Guardar usuario
+        localStorage.setItem("usuarioSN", u);
+
+        // Mostrar bienvenida
+        const welcome = document.getElementById("welcome");
+        welcome.innerText = "Bienvenido/a " + u + " ✔";
+        welcome.style.display = "block";
+
+        // Redirigir después de 1.5 segundos
+        setTimeout(() => {
+            window.location.href = "minutas.html";
+        }, 1500);
+
+    } else {
+        document.getElementById("error").style.display = "block";
+    }
+}
+</script>
+
+</body>
+</html>

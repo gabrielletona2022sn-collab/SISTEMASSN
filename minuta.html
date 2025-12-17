@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Generador de Minutas — SN PROYECTOS</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+    body { font-family: 'Outfit', sans-serif; background: #f2f4f7; margin: 0; padding: 0; }
+    header { background: #1a2b49; color: white; padding: 25px; text-align: center; font-size: 28px; font-weight: 600; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+    .container { max-width: 900px; margin: auto; background: white; margin-top: 30px; padding: 30px; border-radius: 12px; box-shadow: 0 3px 10px rgba(0,0,0,0.15); }
+    h2 { color: #1a2b49; border-left: 4px solid #1a2b49; padding-left: 10px; margin-top: 30px; font-size: 22px; }
+    label { font-weight: 600; color: #333; }
+    input, textarea { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; background: #fafafa; margin-bottom: 10px; }
+    textarea { height: 180px; }
+    button { background: #1a2b49; color: white; border: none; padding: 10px 18px; font-size: 15px; border-radius: 6px; cursor: pointer; transition: 0.2s; margin-top: 5px; }
+    button:hover { background: #223b63; }
+
+    #acumulado {
+        width: 100%;
+        height: 320px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 14px;
+        background: #f9fafc;
+        font-family: 'Times New Roman', serif;
+        line-height: 1.6;
+        box-sizing: border-box;
+    }
+    .btn-group { margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn-export { background: #28a745; }
+    .btn-export:hover { background: #218838; }
+</style>
+</head>
+<body>
+<header>⚖️ Generador Automático de Minutas — SN PROYECTOS</header>
+<div class="container">
+
+<h2>Datos generales del proyecto</h2>
+<label>PROYECTO:</label><input id="proyecto">
+<label>DIRECCIÓN:</label><input id="direccion">
+
+<h2>Datos de la propiedad</h2>
+<label>PROPIEDAD (Ej: CASA 1-2):</label><input id="propiedad">
+<label>ÁREA (m²):</label><input id="area">
+
+<h2>Estaciones (Medidas y Colindancias)</h2>
+<label>Pegue aquí las líneas tal como vienen en Excel (una por fila):</label>
+<textarea id="estacionesTexto" placeholder="1	2	288°0'5&quot;	25.10	ESPACIO AEREO"></textarea>
+
+<button onclick="generar()">📄 Generar minuta</button>
+
+<h2>Resultado</h2>
+<textarea id="resultado"></textarea>
+
+<button onclick="agregarAlDocumento()">➕ Confirmar y agregar al documento</button>
+
+<hr style="margin-top: 40px; opacity: 0.2;">
+
+<h2>Documento acumulado</h2>
+<textarea id="acumulado" readonly placeholder="Aquí se irán acumulando las minutas confirmadas..."></textarea>
+
+<div class="btn-group">
+    <button onclick="copiarDocumento()">📋 Copiar documento completo</button>
+    <button onclick="exportarWord()" class="btn-export">💾 Descargar Word (.doc)</button>
+</div>
+
+</div>
+
+<script>
+function numeroALetras(num) {
+    if (num === '' || num === null || num === undefined) return '';
+    let str = num.toString().trim();
+    if (str.includes('.')) {
+        let partes = str.split('.');
+        return numeroALetras(partes[0]) + ' punto ' + numeroALetras(partes[1]);
+    }
+    const unidades = ['cero','uno','dos','tres','cuatro','cinco','seis','siete','ocho','nueve'];
+    const especiales = ['diez','once','doce','trece','catorce','quince'];
+    const decenas = ['','diez','veinte','treinta','cuarenta','cincuenta','sesenta','setenta','ochenta','noventa'];
+    const centenas = ['','ciento','doscientos','trescientos','cuatrocientos','quinientos','seiscientos','setecientos','ochocientos','novecientos'];
+    let n = parseInt(str);
+    if (isNaN(n)) return '';
+    if (n < 10) return unidades[n];
+    if (n >= 10 && n <= 15) return especiales[n - 10];
+    if (n < 20) return 'dieci' + unidades[n - 10];
+    if (n === 20) return 'veinte';
+    if (n < 30) return 'veinti' + unidades[n - 20];
+    if (n < 100) {
+        let d = Math.floor(n / 10);
+        let u = n % 10;
+        return decenas[d] + (u ? ' y ' + unidades[u] : '');
+    }
+    if (n === 100) return 'cien';
+    if (n < 1000) {
+        let c = Math.floor(n / 100);
+        let r = n % 100;
+        return centenas[c] + (r ? ' ' + numeroALetras(r) : '');
+    }
+    if (n < 2000) return 'mil' + (n % 1000 ? ' ' + numeroALetras(n % 1000) : '');
+    if (n < 1000000) {
+        let m = Math.floor(n / 1000);
+        let r = n % 1000;
+        return numeroALetras(m) + ' mil' + (r ? ' ' + numeroALetras(r) : '');
+    }
+    return n.toString();
+}
+
+function convertirTexto(texto) {
+    if (!texto) return '';
+    return texto.replace(/\d+(?:-\d+)?(?:\.\d+)?/g, function(match) {
+        if (match.includes('-')) {
+            let partes = match.split('-');
+            return numeroALetras(partes[0]) + ' guion ' + numeroALetras(partes[1]) + ' (' + match + ')';
+        }
+        if (match.includes('.')) return numeroALetras(match) + ' (' + match + ')';
+        return numeroALetras(match) + ' (' + match + ')';
+    });
+}
+
+function generar(){
+    let texto = `${convertirTexto(document.getElementById('propiedad').value).toUpperCase()}, ${convertirTexto(document.getElementById('proyecto').value).toUpperCase()} (QUE SI FORMARÁ FINCA FILIAL) Finca nueva de naturaleza urbana, ubicada en ${convertirTexto(document.getElementById('direccion').value)}, con un área total de ${numeroALetras(document.getElementById('area').value)} (${document.getElementById('area').value}) metros cuadrados, y con las siguientes estaciones, medidas y colindancias:\n`;
+    let lineas = document.getElementById('estacionesTexto').value.split(/\n+/);
+    lineas.forEach(l=>{
+        let p = l.split(/\t+/);
+        if(p.length < 5) return;
+        let est = p[0], po = p[1], dato = p[2], extra = p[3], col = convertirTexto(p.slice(4).join(' '));
+        texto += `\nDe la estación ${numeroALetras(est)} (${est}) al punto observado ${numeroALetras(po)} (${po}): `;
+        if(dato.startsWith('D=')){
+            let gms = dato.replace('D=','').match(/(\d+)°(\d+)'(\d+)/);
+            let L = extra.match(/L=([0-9.]+)/)[1];
+            let R = extra.match(/R=([0-9.]+)/)[1];
+            texto += `Con una delta de ${numeroALetras(gms[1])} grados (${gms[1]}°), ${numeroALetras(gms[2])} minutos (${gms[2]}'), ${numeroALetras(gms[3])} segundos (${gms[3]}"), una longitud de curva de ${numeroALetras(L)} (${L}) metros y un radio de ${numeroALetras(R)} (${R}) metros, colindando con ${col}; `;
+        } else {
+            let gms = dato.match(/(\d+)°(\d+)'(\d+)/);
+            texto += `Con un azimut de ${numeroALetras(gms[1])} grados (${gms[1]}°), ${numeroALetras(gms[2])} minutos (${gms[2]}'), ${numeroALetras(gms[3])} segundos (${gms[3]}"), una distancia recta de ${numeroALetras(extra)} (${extra}) metros, colindando con ${col}; `;
+        }
+    });
+    document.getElementById('resultado').value = texto;
+}
+
+function agregarAlDocumento() {
+    const resultado = document.getElementById('resultado');
+    const acumulado = document.getElementById('acumulado');
+
+    if (!resultado.value.trim()) {
+        alert("⚠️ Primero genere una minuta");
+        return;
+    }
+
+    let separador = acumulado.value.trim() 
+        ? "\n\n----------------------------------------------------------\n\n" 
+        : "";
+
+    acumulado.value += separador + resultado.value;
+    resultado.value = "";
+    alert("✅ Minuta agregada al documento");
+}
+
+function copiarDocumento() {
+    const acumulado = document.getElementById('acumulado');
+    if (!acumulado.value.trim()) {
+        alert("⚠️ El documento acumulado está vacío");
+        return;
+    }
+    navigator.clipboard.writeText(acumulado.value)
+        .then(() => alert("✅ Documento completo copiado al portapapeles"))
+        .catch(() => alert("❌ No se pudo copiar el documento"));
+}
+
+function exportarWord() {
+    const contenido = document.getElementById("acumulado").value;
+    if (!contenido.trim()) {
+        alert("⚠️ El documento está vacío");
+        return;
+    }
+
+    const encabezado = `
+    <html xmlns:o='urn:schemas-microsoft-com:office:office' 
+          xmlns:w='urn:schemas-microsoft-com:office:word' 
+          xmlns='http://www.w3.org/TR/REC-html40'>
+    <head><meta charset='utf-8'></head><body>
+    `;
+    const pie = "</body></html>";
+
+    const htmlCompleto = encabezado + 
+        "<div style='font-family:Times New Roman; font-size:12pt; white-space: pre-wrap;'>" + 
+        contenido.replace(/</g, "&lt;").replace(/>/g, "&gt;") + 
+        "</div>" + 
+        pie;
+
+    const blob = new Blob(['\ufeff', htmlCompleto], { type: 'application/msword' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "MINUTA_COMPLETA.doc";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>
