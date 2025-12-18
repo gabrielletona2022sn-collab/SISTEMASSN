@@ -146,23 +146,62 @@ function convertirTexto(texto) {
 
 function generar(){
     if (!validarCampos()) return;
+
     let texto = `${convertirTexto(document.getElementById('propiedad').value).toUpperCase()}, ${convertirTexto(document.getElementById('proyecto').value).toUpperCase()} (QUE SI FORMARÁ FINCA FILIAL) Finca nueva de naturaleza urbana, ubicada en ${convertirTexto(document.getElementById('direccion').value)}, con un área total de ${numeroALetras(document.getElementById('area').value)} (${document.getElementById('area').value}) metros cuadrados, y con las siguientes estaciones, medidas y colindancias:\n`;
+    
     let lineas = document.getElementById('estacionesTexto').value.trim().split(/\n+/);
-    lineas.forEach(l=>{
+    let errores = []; // Acumulador de errores
+
+    lineas.forEach((l, index) => {
         let p = l.split(/\t+/);
-        if(p.length < 5) return;
-        let est = p[0], po = p[1], dato = p[2], extra = p[3], col = convertirTexto(p.slice(4).join(' '));
+        let numLinea = index + 1; // Para que el usuario entienda qué fila es
+
+        // 1. VALIDACIÓN DE COLUMNAS
+        if(p.length < 5) {
+            errores.push(`Línea ${numLinea}: Faltan datos. Asegúrate de copiar las 5 columnas de Excel.`);
+            return;
+        }
+
+        // 2. LIMPIEZA DE DATOS (TRIM)
+        let est = p[0].trim(), 
+            po = p[1].trim(), 
+            dato = p[2].trim(), 
+            extra = p[3].trim(), 
+            col = convertirTexto(p.slice(4).join(' ').trim());
+
+        // 3. REGEX FLEXIBLE (Cero o más espacios entre números y símbolos)
+        let regexGMS = /(\d+)\s*°\s*(\d+)\s*'\s*(\d+)/;
+
         texto += `\nDe la estación ${numeroALetras(est)} (${est}) al punto observado ${numeroALetras(po)} (${po}): `;
-        if(dato.startsWith('D=')){
-            let gms = dato.replace('D=','').match(/(\d+)°(\d+)'(\d+)/);
-            let L = extra.match(/L=([0-9.]+)/)[1];
-            let R = extra.match(/R=([0-9.]+)/)[1];
-            texto += `Con una delta de ${numeroALetras(gms[1])} grados (${gms[1]}°), ${numeroALetras(gms[2])} minutos (${gms[2]}'), ${numeroALetras(gms[3])} segundos (${gms[3]}"), una longitud de curva de ${numeroALetras(L)} (${L}) metros y un radio de ${numeroALetras(R)} (${R}) metros, colindando con ${col}; `;
-        } else {
-            let gms = dato.match(/(\d+)°(\d+)'(\d+)/);
-            texto += `Con un azimut de ${numeroALetras(gms[1])} grados (${gms[1]}°), ${numeroALetras(gms[2])} minutos (${gms[2]}'), ${numeroALetras(gms[3])} segundos (${gms[3]}"), una distancia recta de ${numeroALetras(extra)} (${extra}) metros, colindando con ${col}; `;
+
+        try {
+            if(dato.toUpperCase().startsWith('D=')){
+                let gms = dato.replace(/D=\s*/i, '').match(regexGMS);
+                
+                // Validación extra por si el formato de grados está mal
+                if(!gms) throw new Error("Formato Delta incorrecto");
+
+                let L = extra.match(/L=\s*([0-9.]+)/i)[1];
+                let R = extra.match(/R=\s*([0-9.]+)/i)[1];
+                texto += `Con una delta de ${numeroALetras(gms[1])} grados (${gms[1]}°), ${numeroALetras(gms[2])} minutos (${gms[2]}'), ${numeroALetras(gms[3])} segundos (${gms[3]}"), una longitud de curva de ${numeroALetras(L)} (${L}) metros y un radio de ${numeroALetras(R)} (${R}) metros, colindando con ${col}; `;
+            } else {
+                let gms = dato.match(regexGMS);
+                
+                if(!gms) throw new Error("Formato Azimut incorrecto");
+
+                texto += `Con un azimut de ${numeroALetras(gms[1])} grados (${gms[1]}°), ${numeroALetras(gms[2])} minutos (${gms[2]}'), ${numeroALetras(gms[3])} segundos (${gms[3]}"), una distancia recta de ${numeroALetras(extra)} (${extra}) metros, colindando con ${col}; `;
+            }
+        } catch (e) {
+            errores.push(`Línea ${numLinea}: Error en el formato de medidas o colindancias.`);
         }
     });
+
+    // 4. MOSTRAR ERRORES SI EXISTEN
+    if (errores.length > 0) {
+        alert("❌ No se pudo generar la minuta:\n\n" + errores.join("\n"));
+        return; // Detiene la ejecución para que no salga texto incompleto
+    }
+
     document.getElementById('resultado').value = texto;
 }
 
