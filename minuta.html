@@ -5,93 +5,149 @@
 <title>Generador de Minutas — SN PROYECTOS</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
-    /* VARIABLES DE COLOR DINÁMICAS */
-    :root {
-        --bg-color: #f2f4f7;
-        --container-bg: #ffffff;
-        --text-color: #333;
-        --input-bg: #fafafa;
-        --border-color: #ccc;
-        --primary: #1a2b49;
-    }
+:root {
+    --primary: #1a2b49;
+    --accent: #3b82f6;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #334155;
+}
 
-    [data-theme="dark"] {
-        --bg-color: #121212;
-        --container-bg: #1e1e1e;
-        --text-color: #e0e0e0;
-        --input-bg: #2d2d2d;
-        --border-color: #444;
-        --primary: #3a506b;
-    }
+[data-theme="dark"] {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --text: #f1f5f9;
+    --primary: #38bdf8;
+}
 
-    /* ESTILOS GENERALES */
-    body { font-family: 'Outfit', sans-serif; background: var(--bg-color); color: var(--text-color); margin: 0; padding: 0; transition: background 0.3s, color 0.3s; }
-    header { background: var(--primary); color: white; padding: 25px; text-align: center; font-size: 28px; font-weight: 600; box-shadow: 0 2px 6px rgba(0,0,0,0.2); position: relative; }
-    
-    .container { max-width: 900px; margin: 30px auto; background: var(--container-bg); padding: 30px; border-radius: 12px; box-shadow: 0 3px 10px rgba(0,0,0,0.15); transition: 0.3s; }
-    
-    h2 { color: var(--primary); border-left: 4px solid var(--primary); padding-left: 10px; margin-top: 30px; font-size: 22px; transition: 0.3s; }
-    label { font-weight: 600; }
-    
-    input, textarea { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 14px; background: var(--input-bg); color: var(--text-color); margin-bottom: 12px; box-sizing: border-box; transition: 0.3s; }
-    textarea { height: 180px; resize: vertical; }
-    
-    button { background: var(--primary); color: white; border: none; padding: 12px 20px; font-size: 15px; border-radius: 6px; cursor: pointer; transition: 0.2s; margin-top: 5px; font-weight: 600; }
-    button:hover { opacity: 0.9; transform: translateY(-1px); }
+body { 
+    font-family: 'Outfit', sans-serif; 
+    background: var(--bg); 
+    color: var(--text); 
+    margin: 0; 
+    display: flex; 
+    flex-direction: column; 
+    height: 100vh;
+}
 
-    /* BOTÓN MODO OSCURO */
-    .btn-mode { position: absolute; top: 22px; right: 25px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.4); padding: 8px 15px; font-size: 13px; color: white; border-radius: 20px; display: flex; align-items: center; gap: 8px; }
-    .btn-mode:hover { background: rgba(255,255,255,0.25); }
+/* Layout de dos columnas */
+.app-container {
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: 0;
+    flex: 1;
+    overflow: hidden;
+}
 
-    /* BARRA DE PROGRESO Y ERRORES */
-    #progress-container { width: 100%; background: #ddd; border-radius: 10px; height: 8px; margin: 15px 0; display:none; overflow: hidden; }
-    #progress-bar { width: 0%; background: #28a745; height: 100%; transition: 0.5s; }
-    .input-error { border: 2px solid #dc3545 !important; background-color: rgba(220, 53, 69, 0.05) !important; }
+/* Columna Izquierda: Formulario */
+.sidebar {
+    background: var(--card);
+    padding: 25px;
+    border-right: 1px solid rgba(0,0,0,0.1);
+    overflow-y: auto;
+    box-shadow: 4px 0 10px rgba(0,0,0,0.05);
+}
 
-    #acumulado { height: 320px; font-family: 'Times New Roman', serif; line-height: 1.6; }
-    .btn-group { margin-top: 20px; display: flex; gap: 12px; flex-wrap: wrap; }
-    .btn-export { background: #28a745; }
+/* Columna Derecha: Vista Previa */
+.main-content {
+    padding: 40px;
+    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+    background: var(--bg);
+}
+
+/* La "Hoja de Papel" virtual */
+.paper {
+    background: white;
+    width: 100%;
+    max-width: 800px;
+    min-height: 1000px;
+    padding: 60px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    border-radius: 4px;
+    color: #1a1a1a; /* Color texto legal */
+    font-family: 'Times New Roman', serif;
+    line-height: 1.6;
+    position: relative;
+}
+
+h2 { font-size: 16px; text-transform: uppercase; letter-spacing: 1px; color: var(--primary); margin-top: 20px; }
+
+input, textarea { 
+    width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; 
+    margin-bottom: 15px; box-sizing: border-box; transition: 0.2s;
+    background: var(--bg); color: var(--text);
+}
+
+input:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+
+button { 
+    width: 100%; background: var(--primary); color: white; border: none; 
+    padding: 14px; border-radius: 8px; cursor: pointer; font-weight: 600; margin-bottom: 10px;
+}
+
+/* Toast Notification */
+.toast {
+    position: fixed; top: 20px; right: 20px; background: #10b981; color: white;
+    padding: 12px 25px; border-radius: 8px; display: none; z-index: 1000;
+    animation: slideIn 0.3s ease;
+}
+@keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
 </style>
 </head>
 <body>
 
-<header>
-    ⚖️ Generador Automático de Minutas — SN PROYECTOS
-    <button class="btn-mode" onclick="toggleTheme()" id="theme-btn">🌙 Modo Oscuro</button>
+<header style="background: var(--primary); color: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center;">
+    <span style="font-weight: 600;">⚖️ SN PROYECTOS — Panel de Minutas</span>
+    <button onclick="toggleTheme()" id="theme-btn" style="width: auto; margin: 0; padding: 8px 15px; font-size: 12px;">🌙 Modo Oscuro</button>
 </header>
 
-<div class="container">
-    <div id="progress-container"><div id="progress-bar"></div></div>
+<div id="toast" class="toast">✅ Acción realizada con éxito</div>
 
-    <h2>Datos generales del proyecto</h2>
-    <label>PROYECTO:</label><input id="proyecto" placeholder="Nombre del proyecto">
-    <label>DIRECCIÓN:</label><input id="direccion" placeholder="Ubicación exacta">
+<div class="app-container">
+    <aside class="sidebar">
+        <h2>Datos del Proyecto</h2>
+        <input id="proyecto" placeholder="Nombre del proyecto">
+        <input id="direccion" placeholder="Ubicación exacta">
 
-    <h2>Datos de la propiedad</h2>
-    <label>PROPIEDAD (Ej: CASA 1-2):</label><input id="propiedad" placeholder="Identificador de la finca">
-    <label>ÁREA (m²):</label><input id="area" placeholder="Ej: 120.50">
+        <h2>Propiedad y Área</h2>
+        <input id="propiedad" placeholder="Identificador (CASA 1-2)">
+        <input id="area" placeholder="Área en m²">
 
-    <h2>Estaciones (Medidas y Colindancias)</h2>
-    <label>Pegue aquí las líneas de Excel:</label>
-    <textarea id="estacionesTexto" placeholder="Ej: 1	2	288°0'5&quot;	25.10	ESPACIO AEREO"></textarea>
+        <h2>Estaciones (Excel)</h2>
+        <textarea id="estacionesTexto" style="height: 150px;" placeholder="Pegue aquí las líneas de Excel..."></textarea>
+        
+        <button onclick="generar()" style="background: var(--accent);">📄 Generar Vista Previa</button>
+        <button onclick="agregarAlDocumento()">➕ Confirmar y Acumular</button>
+        
+        <hr style="margin: 20px 0; opacity: 0.1;">
+        
+        <button onclick="exportarWord()" style="background: #10b981;">💾 Descargar Word (.doc)</button>
+        <button onclick="limpiarAcumulado()" style="background: #ef4444;">🧹 Limpiar Todo</button>
+    </aside>
 
-    <button onclick="generar()">📄 Generar minuta</button>
+    <main class="main-content">
+        <div class="paper">
+            <div style="text-align: center; border-bottom: 2px solid #eee; margin-bottom: 30px; padding-bottom: 10px;">
+                <h1 style="margin: 0; font-size: 20px; font-family: 'Outfit';">VISTA PREVIA DE MINUTA</h1>
+            </div>
+            
+            <div id="resultado-preview" style="white-space: pre-wrap; margin-bottom: 40px; color: #3b82f6; font-weight: bold;">
+                El texto generado aparecerá aquí...
+            </div>
 
-    <h2>Resultado</h2>
-    <textarea id="resultado" readonly placeholder="Aquí aparecerá el texto generado..."></textarea>
-    <button onclick="agregarAlDocumento()">➕ Confirmar y agregar al documento</button>
+            <div style="border-top: 1px dashed #ccc; margin: 40px 0; position: relative;">
+                <span style="position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: white; padding: 0 10px; font-size: 12px; color: #999;">DOCUMENTO ACUMULADO</span>
+            </div>
 
-    <hr style="margin-top: 45px; opacity: 0.1;">
-
-    <h2>Documento acumulado</h2>
-    <textarea id="acumulado" readonly placeholder="Aquí se irán acumulando todas las propiedades confirmadas..."></textarea>
-
-    <div class="btn-group">
-        <button onclick="copiarDocumento()">📋 Copiar completo</button>
-        <button onclick="exportarWord()" class="btn-export">💾 Descargar Word (.doc)</button>
-        <button onclick="limpiarAcumulado()" style="background:#6c757d;">🧹 Limpiar Todo</button>
-    </div>
+            <div id="acumulado-display" style="white-space: pre-wrap; font-size: 14px;"></div>
+        </div>
+    </main>
 </div>
+
+<textarea id="resultado" style="display:none;"></textarea>
+<textarea id="acumulado" style="display:none;"></textarea>
 
 <script>
 // --- MOTOR DE CONVERSIÓN ---
@@ -203,6 +259,9 @@ function generar(){
     }
 
     document.getElementById('resultado').value = texto;
+    // Actualiza la hoja de papel visual
+document.getElementById('resultado-preview').innerText = texto;
+mostrarNotificacion("Vista previa generada");
 }
 
 // --- FUNCIONES DE INTERFAZ ---
@@ -232,21 +291,34 @@ function validarCampos() {
 function agregarAlDocumento() {
     const res = document.getElementById('resultado');
     const acu = document.getElementById('acumulado');
-    if (!res.value) { alert("⚠️ Genera la minuta primero"); return; }
+    
+    if (!res.value) { 
+        mostrarNotificacion("⚠️ Genera la minuta primero"); 
+        return; 
+    }
 
     let sep = acu.value.trim() ? "\n\n--------------------------------------------\n\n" : "";
     acu.value += sep + res.value;
     
-    // Limpieza parcial
+    // --- NUEVAS LÍNEAS DE VISUALIZACIÓN ---
+    // Actualiza el acumulado visual en la hoja de papel derecha
+    document.getElementById('acumulado-display').innerText = acu.value;
+    // Limpia el preview temporal para indicar que ya se guardó
+    document.getElementById('resultado-preview').innerText = "Esperando nueva generación...";
+    // Notificación elegante en lugar de alert
+    mostrarNotificacion("✅ Agregado al documento correctamente");
+    // ---------------------------------------
+
+    // Limpieza parcial de inputs para la siguiente propiedad
     document.getElementById('propiedad').value = "";
     document.getElementById('area').value = "";
     document.getElementById('estacionesTexto').value = "";
     res.value = "";
 
-    // Progreso
+    // Actualización de la barra de progreso
     document.getElementById('progress-container').style.display = 'block';
-    let lineas = acu.value.split('---').length;
-    document.getElementById('progress-bar').style.width = Math.min(lineas * 10, 100) + "%";
+    let bloques = acu.value.split('--------------------------------------------').length;
+    document.getElementById('progress-bar').style.width = Math.min(bloques * 10, 100) + "%";
 
     guardarProgreso();
 }
@@ -294,6 +366,12 @@ function exportarWord() {
     const link = document.createElement("a");
     link.href = url; link.download = "MINUTA_SN_PROYECTOS.doc";
     link.click();
+}
+function mostrarNotificacion(msj) {
+    const t = document.getElementById('toast');
+    t.innerText = msj;
+    t.style.display = 'block';
+    setTimeout(() => { t.style.display = 'none'; }, 3000);
 }
 </script>
 </body>
