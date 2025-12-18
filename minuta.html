@@ -7,7 +7,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
     :root {
-        /* Palette - Moderna & Profesional */
         --bg-main: #f8fafc;
         --surface: #ffffff;
         --primary: #2563eb;
@@ -18,7 +17,7 @@
         --accent: #0f172a;
         --border: #e2e8f0;
         --success: #10b981;
-        --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
         --radius: 12px;
     }
 
@@ -30,152 +29,72 @@
         --text-main: #f1f5f9;
         --text-muted: #94a3b8;
         --border: #334155;
-        --accent: #f8fafc;
     }
 
-    body { 
-        font-family: 'Inter', sans-serif; 
-        background: var(--bg-main); 
-        color: var(--text-main); 
-        margin: 0; 
-        padding: 0; 
-        transition: all 0.3s ease;
-        line-height: 1.5;
-    }
+    body { font-family: 'Inter', sans-serif; background: var(--bg-main); color: var(--text-main); margin: 0; transition: all 0.3s ease; line-height: 1.5; }
 
-    /* NAVBAR */
     header { 
         background: var(--surface); 
-        color: var(--text-main); 
         padding: 1rem 2rem; 
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        display: flex; justify-content: space-between; align-items: center;
         border-bottom: 1px solid var(--border);
-        position: sticky;
-        top: 0;
-        z-index: 100;
+        position: sticky; top: 0; z-index: 100;
     }
     
-    .logo { font-weight: 700; font-size: 1.2rem; letter-spacing: -0.5px; color: var(--primary); }
+    .logo { font-weight: 700; font-size: 1.2rem; color: var(--primary); }
 
-    /* LAYOUT MÁS MODERNO (Dos columnas en pantallas grandes) */
     .app-container { 
-        max-width: 1200px; 
-        margin: 2rem auto; 
-        padding: 0 1.5rem;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 2rem;
+        max-width: 1400px; margin: 2rem auto; padding: 0 1.5rem;
+        display: grid; grid-template-columns: 400px 1fr; gap: 2rem;
     }
 
-    @media (max-width: 900px) { .app-container { grid-template-columns: 1fr; } }
+    @media (max-width: 1000px) { .app-container { grid-template-columns: 1fr; } }
 
-    /* TARJETAS (CARDS) */
     .card {
-        background: var(--surface);
-        padding: 1.5rem;
-        border-radius: var(--radius);
-        border: 1px solid var(--border);
-        box-shadow: var(--shadow);
-        margin-bottom: 1.5rem;
+        background: var(--surface); padding: 1.5rem; border-radius: var(--radius);
+        border: 1px solid var(--border); box-shadow: var(--shadow); margin-bottom: 1.5rem;
     }
 
-    h2 { 
-        font-size: 0.875rem; 
-        text-transform: uppercase; 
-        letter-spacing: 0.05em; 
-        color: var(--text-muted); 
-        margin-bottom: 1.25rem;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
+    h2 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 8px; }
 
-    /* INPUTS ESTILO MINIMALISTA */
     .input-group { margin-bottom: 1rem; }
-    
-    label { 
-        display: block; 
-        font-size: 0.75rem; 
-        font-weight: 600; 
-        margin-bottom: 0.4rem; 
-        color: var(--text-muted);
-    }
+    label { display: block; font-size: 0.7rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-muted); }
 
     input, textarea { 
-        width: 100%; 
-        padding: 0.75rem; 
-        border: 1px solid var(--border); 
-        border-radius: 8px; 
-        font-size: 0.95rem; 
-        background: var(--bg-main); 
-        color: var(--text-main); 
-        box-sizing: border-box; 
-        transition: border-color 0.2s;
-        font-family: inherit;
-    }
-
-    input:focus, textarea:focus {
-        outline: none;
-        border-color: var(--primary);
-        ring: 2px solid var(--primary);
+        width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; 
+        font-size: 0.9rem; background: var(--bg-main); color: var(--text-main); box-sizing: border-box; 
+        font-family: inherit; transition: 0.2s;
     }
     
-    textarea { height: 120px; }
+    textarea:focus, input:focus { outline: none; border-color: var(--primary); background: var(--surface); }
 
-    /* BOTONES */
     .btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        padding: 0.75rem 1.5rem;
-        font-weight: 600;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: 0.2s;
-        border: none;
-        font-size: 0.9rem;
+        display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+        padding: 0.8rem 1.5rem; font-weight: 600; border-radius: 8px; cursor: pointer;
+        transition: 0.2s; border: none; font-size: 0.9rem; width: 100%;
     }
 
-    .btn-primary { background: var(--primary); color: white; width: 100%; }
-    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); }
+    
+    .btn-success { background: var(--success); color: white; height: 60px; font-size: 1rem; }
     
     .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-main); }
     .btn-outline:hover { background: var(--bg-main); }
 
-    .btn-success { background: var(--success); color: white; }
-
-    /* BARRA DE PROGRESO */
-    #progress-container { 
-        position: fixed; top: 0; left: 0; width: 100%; height: 4px; background: transparent; z-index: 1000; 
-    }
-    #progress-bar { height: 100%; background: var(--success); width: 0%; transition: width 0.4s ease; }
-
-    /* RESULTADOS */
-    #resultado, #acumulado {
-        background: var(--bg-main);
-        font-family: 'Courier New', Courier, monospace;
-        font-size: 0.85rem;
-        border-style: dashed;
+    #resultado { 
+        height: 500px; font-family: 'Times New Roman', serif; font-size: 1.1rem; 
+        line-height: 1.6; border: 2px solid var(--primary); background: var(--surface);
     }
 
-    #acumulado { height: 400px; }
-
-    .btn-group-row { display: flex; gap: 10px; margin-top: 1rem; }
+    #acumulado { height: 150px; font-size: 0.8rem; opacity: 0.7; background: var(--bg-main); }
 
     .input-error { border: 2px solid #ef4444 !important; }
 
-    .btn-mode {
-        background: none; border: none; color: var(--text-main); cursor: pointer; font-size: 1.2rem;
-    }
-
+    .btn-mode { background: none; border: none; color: var(--text-main); cursor: pointer; font-size: 1.2rem; }
 </style>
 </head>
 <body>
-
-<div id="progress-container"><div id="progress-bar"></div></div>
 
 <header>
     <div class="logo">SN PROYECTOS <span style="font-weight:300; opacity:0.6">| SmartMinutes</span></div>
@@ -184,70 +103,61 @@
 
 <div class="app-container">
     
-    <div class="input-section">
+    <div class="sidebar">
         <div class="card">
-            <h2>📍 Contexto del Proyecto</h2>
+            <h2>📍 Datos del Proyecto</h2>
             <div class="input-group">
-                <label>NOMBRE DEL PROYECTO</label>
-                <input id="proyecto" placeholder="Ej: Residenciales El Cortijo">
+                <label>PROYECTO</label>
+                <input id="proyecto" placeholder="Nombre del proyecto">
             </div>
             <div class="input-group">
-                <label>UBICACIÓN / DIRECCIÓN</label>
-                <input id="direccion" placeholder="Ej: Km 15.5 Carretera a El Salvador">
+                <label>DIRECCIÓN</label>
+                <input id="direccion" placeholder="Ubicación">
             </div>
-        </div>
-
-        <div class="card">
-            <h2>🏠 Detalles de la Propiedad</h2>
-            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                 <div class="input-group">
-                    <label>IDENTIFICADOR (PROPIEDAD)</label>
-                    <input id="propiedad" placeholder="CASA A-1">
+                    <label>PROPIEDAD</label>
+                    <input id="propiedad" placeholder="CASA 1">
                 </div>
                 <div class="input-group">
                     <label>ÁREA (M²)</label>
-                    <input id="area" placeholder="120.00">
+                    <input id="area" placeholder="0.00">
                 </div>
             </div>
-            
             <div class="input-group">
-                <label>DATOS DE EXCEL (ESTACIONES)</label>
-                <textarea id="estacionesTexto" placeholder="Pegue aquí las 5 columnas de Excel..."></textarea>
+                <label>DATOS DE EXCEL</label>
+                <textarea id="estacionesTexto" style="height: 100px;" placeholder="Pegue columnas aquí..."></textarea>
             </div>
-
-            <button class="btn btn-primary" onclick="generar()">
-                <span>⚡</span> Generar Minuta
-            </button>
+            <button class="btn btn-primary" onclick="generar()">⚙️ Procesar Datos</button>
         </div>
 
-        <div class="card" style="border-style: dashed; background: transparent;">
-            <h2>📝 Vista Previa</h2>
-            <textarea id="resultado" readonly placeholder="El texto generado aparecerá aquí..."></textarea>
-            <div style="margin-top: 1rem;">
-                <button class="btn btn-success" style="width: 100%;" onclick="agregarAlDocumento()">
-                    <span>➕</span> Confirmar y Guardar en Bloque
-                </button>
+        <div class="card" style="background: #f1f5f9; border-style: dashed;">
+            <h2>📦 Acumulado (Para descarga final)</h2>
+            <textarea id="acumulado" readonly></textarea>
+            <div style="display: flex; gap: 8px; margin-top: 10px;">
+                <button class="btn btn-outline" style="font-size: 0.75rem;" onclick="exportarWord()">💾 Word</button>
+                <button class="btn btn-outline" style="font-size: 0.75rem; color: #ef4444;" onclick="limpiarAcumulado()">🧹 Limpiar</button>
             </div>
         </div>
     </div>
 
-    <div class="output-section">
-        <div class="card">
-            <h2>📂 Documento Final Acumulado</h2>
-            <textarea id="acumulado" readonly placeholder="Aquí se están guardando todas tus propiedades..."></textarea>
-            
-            <div class="btn-group-row">
-                <button class="btn btn-outline" style="flex:1" onclick="copiarDocumento()">📋 Copiar</button>
-                <button class="btn btn-outline" style="flex:1" onclick="exportarWord()">💾 Word</button>
+    <div class="main-content">
+        <div class="card" style="height: calc(100% - 3rem);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h2 style="margin: 0;">🔍 Vista Previa de la Minuta</h2>
+                <span id="badge" style="background: var(--primary); color: white; padding: 2px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; display: none;">GENERADO</span>
             </div>
             
-            <button class="btn btn-outline" style="width:100%; margin-top:10px; color: #ef4444;" onclick="limpiarAcumulado()">
-                🧹 Borrar Todo
-            </button>
-        </div>
-        
-        <div style="padding: 1rem; color: var(--text-muted); font-size: 0.8rem; text-align: center;">
-            SN PROYECTOS — Herramienta interna de gestión de minutas.
+            <textarea id="resultado" readonly placeholder="El texto se mostrará aquí después de 'Procesar Datos'..."></textarea>
+            
+            <div style="margin-top: 1.5rem;">
+                <button class="btn btn-success" onclick="agregarAlDocumento()">
+                    ✅ CONFIRMAR Y ACUMULAR PROPIEDAD
+                </button>
+                <p style="text-align: center; font-size: 0.75rem; color: var(--text-muted); margin-top: 10px;">
+                    Al confirmar, los datos actuales se guardarán en el bloque final y se limpiará el formulario para la siguiente propiedad.
+                </p>
+            </div>
         </div>
     </div>
 </div>
@@ -262,7 +172,7 @@ function numeroALetras(num) {
         return numeroALetras(partes[0]) + ' punto ' + numeroALetras(partes[1]);
     }
     const unidades = ['cero','uno','dos','tres','cuatro','cinco','seis','siete','ocho','nueve'];
-    const especiales = ['diez','once','doce','trece','caturce','quince'];
+    const especiales = ['diez','once','doce','trece','catorce','quince'];
     const decenas = ['','diez','veinte','treinta','cuarenta','cincuenta','sesenta','setenta','ochenta','noventa'];
     const centenas = ['','ciento','doscientos','trescientos','cuatrocientos','quinientos','seiscientos','setecientos','ochocientos','novecientos'];
     let n = parseInt(str);
@@ -272,23 +182,11 @@ function numeroALetras(num) {
     if (n < 20) return 'dieci' + unidades[n - 10];
     if (n === 20) return 'veinte';
     if (n < 30) return 'veinti' + unidades[n - 20];
-    if (n < 100) {
-        let d = Math.floor(n / 10);
-        let u = n % 10;
-        return decenas[d] + (u ? ' y ' + unidades[u] : '');
-    }
+    if (n < 100) { let d = Math.floor(n / 10); let u = n % 10; return decenas[d] + (u ? ' y ' + unidades[u] : ''); }
     if (n === 100) return 'cien';
-    if (n < 1000) {
-        let c = Math.floor(n / 100);
-        let r = n % 100;
-        return centenas[c] + (r ? ' ' + numeroALetras(r) : '');
-    }
+    if (n < 1000) { let c = Math.floor(n / 100); let r = n % 100; return centenas[c] + (r ? ' ' + numeroALetras(r) : ''); }
     if (n < 2000) return 'mil' + (n % 1000 ? ' ' + numeroALetras(n % 1000) : '');
-    if (n < 1000000) {
-        let m = Math.floor(n / 1000);
-        let r = n % 1000;
-        return numeroALetras(m) + ' mil' + (r ? ' ' + numeroALetras(r) : '');
-    }
+    if (n < 1000000) { let m = Math.floor(n / 1000); let r = n % 1000; return numeroALetras(m) + ' mil' + (r ? ' ' + numeroALetras(r) : ''); }
     return n.toString();
 }
 
@@ -310,35 +208,25 @@ function generar(){
     let errores = [];
     lineas.forEach((l, index) => {
         let p = l.split(/\t+/);
-        let numLinea = index + 1;
-        if(p.length < 5) { errores.push(`Línea ${numLinea}: Faltan datos.`); return; }
+        if(p.length < 5) { errores.push(`Línea ${index+1}: Faltan datos.`); return; }
         let est = p[0].trim(), po = p[1].trim(), dato = p[2].trim(), extra = p[3].trim(), col = convertirTexto(p.slice(4).join(' ').trim());
         let regexGMS = /(\d+)\s*°\s*(\d+)\s*'\s*(\d+)/;
         texto += `\nDe la estación ${numeroALetras(est)} (${est}) al punto observado ${numeroALetras(po)} (${po}): `;
         try {
             if(dato.toUpperCase().startsWith('D=')){
                 let gms = dato.replace(/D=\s*/i, '').match(regexGMS);
-                if(!gms) throw new Error();
                 let L = extra.match(/L=\s*([0-9.]+)/i)[1];
                 let R = extra.match(/R=\s*([0-9.]+)/i)[1];
                 texto += `Con una delta de ${numeroALetras(gms[1])} grados (${gms[1]}°), ${numeroALetras(gms[2])} minutos (${gms[2]}'), ${numeroALetras(gms[3])} segundos (${gms[3]}"), una longitud de curva de ${numeroALetras(L)} (${L}) metros y un radio de ${numeroALetras(R)} (${R}) metros, colindando con ${col}; `;
             } else {
                 let gms = dato.match(regexGMS);
-                if(!gms) throw new Error();
                 texto += `Con un azimut de ${numeroALetras(gms[1])} grados (${gms[1]}°), ${numeroALetras(gms[2])} minutos (${gms[2]}'), ${numeroALetras(gms[3])} segundos (${gms[3]}"), una distancia recta de ${numeroALetras(extra)} (${extra}) metros, colindando con ${col}; `;
             }
-        } catch (e) { errores.push(`Línea ${numLinea}: Error de formato.`); }
+        } catch (e) { errores.push(`Línea ${index+1}: Error de formato.`); }
     });
     if (errores.length > 0) { alert("❌ Errores:\n" + errores.join("\n")); return; }
     document.getElementById('resultado').value = texto;
-}
-
-// --- INTERFAZ ---
-function toggleTheme() {
-    let theme = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
-    document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem('theme', theme);
-    document.getElementById('theme-btn').innerHTML = theme === "dark" ? "☀️" : "🌙";
+    document.getElementById('badge').style.display = 'block';
 }
 
 function validarCampos() {
@@ -362,8 +250,7 @@ function agregarAlDocumento() {
     document.getElementById('area').value = "";
     document.getElementById('estacionesTexto').value = "";
     res.value = "";
-    let lineas = acu.value.split('---').length;
-    document.getElementById('progress-bar').style.width = Math.min(lineas * 10, 100) + "%";
+    document.getElementById('badge').style.display = 'none';
     guardarProgreso();
 }
 
@@ -375,9 +262,15 @@ function guardarProgreso() {
 function limpiarAcumulado() {
     if(confirm("¿Borrar todo?")) {
         document.getElementById('acumulado').value = "";
-        document.getElementById('progress-bar').style.width = "0%";
         guardarProgreso();
     }
+}
+
+function toggleTheme() {
+    let theme = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem('theme', theme);
+    document.getElementById('theme-btn').innerHTML = theme === "dark" ? "☀️" : "🌙";
 }
 
 window.onload = function() {
@@ -390,16 +283,11 @@ window.onload = function() {
     }
     const theme = localStorage.getItem('theme') || 'light';
     document.documentElement.setAttribute("data-theme", theme);
-    document.getElementById('theme-btn').innerHTML = theme === "dark" ? "☀️" : "🌙";
 };
-
-function copiarDocumento() {
-    navigator.clipboard.writeText(document.getElementById('acumulado').value).then(() => alert("📋 Copiado"));
-}
 
 function exportarWord() {
     const contenido = document.getElementById("acumulado").value;
-    if (!contenido) return alert("Vacío");
+    if (!contenido) return alert("Nada que exportar");
     const html = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'></head><body><div style='font-family:Times New Roman; font-size:12pt; white-space: pre-wrap;'>${contenido.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div></body></html>`;
     const blob = new Blob(['\ufeff', html], { type: 'application/msword' });
     const url = URL.createObjectURL(blob);
