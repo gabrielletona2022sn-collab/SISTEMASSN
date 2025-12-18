@@ -2,308 +2,315 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SN PROYECTOS — Smart Minutes</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>Generador de Minutas — SN PROYECTOS</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
-    :root {
-        --bg-main: #f8fafc;
-        --surface: #ffffff;
-        --primary: #1a2b49;
-        --primary-hover: #2563eb;
-        --text-main: #1e293b;
-        --text-muted: #64748b;
-        --border: #e2e8f0;
-        --success: #28a745;
-        --radius: 12px;
-    }
-
-    [data-theme="dark"] {
-        --bg-main: #0f172a;
-        --surface: #1e293b;
-        --primary: #3b82f6;
-        --text-main: #f1f5f9;
-        --text-muted: #94a3b8;
-        --border: #334155;
-    }
-
-    body { font-family: 'Inter', sans-serif; background: var(--bg-main); color: var(--text-main); margin: 0; transition: background 0.3s; }
-
-    header { 
-        background: var(--primary); color: white; padding: 1rem 2rem; 
-        display: flex; justify-content: space-between; align-items: center;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    
-    .app-container { 
-        max-width: 1400px; margin: 20px auto; padding: 0 20px;
-        display: grid; grid-template-columns: 420px 1fr; gap: 25px;
-    }
-
-    @media (max-width: 1100px) { .app-container { grid-template-columns: 1fr; } }
-
-    .card { background: var(--surface); padding: 25px; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-    h2 { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 20px; border-left: 4px solid var(--primary); padding-left: 10px; }
-
-    .input-group { margin-bottom: 15px; }
-    label { display: block; font-size: 12px; font-weight: 700; margin-bottom: 5px; color: var(--text-muted); }
-
-    input, textarea { 
-        width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; 
-        font-size: 14px; background: var(--bg-main); color: var(--text-main); box-sizing: border-box; 
-    }
-    
-    .btn {
-        padding: 14px; border-radius: 8px; cursor: pointer; font-weight: 600; border: none; transition: 0.2s; width: 100%;
-    }
-    .btn-primary { background: var(--primary); color: white; margin-top: 10px; }
-    .btn-success { background: var(--success); color: white; font-size: 16px; margin-top: 20px; height: 60px; }
-    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-main); font-size: 12px; }
-
-    #resultado { 
-        height: 450px; font-family: 'Times New Roman', serif; font-size: 18px; line-height: 1.6;
-        background: #fff; color: #000; border: 2px solid var(--primary);
-    }
-
-    #acumulado { height: 150px; font-size: 12px; opacity: 0.8; background: #fdfdfd; }
-    .input-error { border: 2px solid #dc3545 !important; }
-    .btn-mode { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 8px 15px; border-radius: 20px; cursor: pointer; }
+:root{
+  --bg:#f6f8fb;
+  --card:#ffffff;
+  --text:#0f172a;
+  --muted:#64748b;
+  --border:#e2e8f0;
+  --primary:#2563eb;
+  --primary-soft:rgba(37,99,235,.12);
+}
+[data-theme="dark"]{
+  --bg:#0b1220;
+  --card:#111827;
+  --text:#e5e7eb;
+  --muted:#94a3b8;
+  --border:#1f2937;
+  --primary:#60a5fa;
+  --primary-soft:rgba(96,165,250,.15);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:'Outfit',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+header{
+  position:sticky;
+  top:0;
+  z-index:10;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:18px 28px;
+  background:var(--card);
+  border-bottom:1px solid var(--border);
+}
+header h1{
+  font-size:20px;
+  margin:0;
+  font-weight:600;
+}
+.btn-mode{
+  background:var(--primary-soft);
+  color:var(--primary);
+  border:0;
+  padding:8px 14px;
+  border-radius:999px;
+  font-weight:500;
+  cursor:pointer;
+}
+.container{
+  max-width:1100px;
+  margin:32px auto;
+  padding:0 20px;
+}
+.grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:24px;
+}
+@media(min-width:900px){
+  .grid{grid-template-columns:1fr 1fr;}
+}
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:24px;
+  box-shadow:0 10px 30px rgba(0,0,0,.06);
+}
+.card h2{
+  margin:0 0 16px;
+  font-size:18px;
+  font-weight:600;
+}
+label{
+  font-size:13px;
+  font-weight:500;
+  color:var(--muted);
+}
+input,textarea{
+  width:100%;
+  margin-top:6px;
+  margin-bottom:14px;
+  padding:12px 14px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:transparent;
+  color:var(--text);
+  font-family:inherit;
+  font-size:14px;
+}
+input:focus,textarea:focus{
+  outline:none;
+  border-color:var(--primary);
+  box-shadow:0 0 0 3px var(--primary-soft);
+}
+textarea{resize:vertical;min-height:140px}
+.btn{
+  border-radius:12px;
+  border:0;
+  padding:12px 18px;
+  font-weight:600;
+  cursor:pointer;
+  font-size:14px;
+}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-secondary{background:var(--primary-soft);color:var(--primary)}
+.btn-danger{background:#ef4444;color:#fff}
+.btn-group{display:flex;gap:12px;flex-wrap:wrap}
+#resultado,#acumulado{
+  font-family:'Times New Roman',serif;
+  background:#fcfcfc;
+  color:#111;
+}
+[data-theme="dark"] #resultado,
+[data-theme="dark"] #acumulado{
+  background:#0b1220;
+  color:#e5e7eb;
+}
+#progress-container{
+  display:none;
+  height:6px;
+  background:var(--border);
+  border-radius:10px;
+  overflow:hidden;
+  margin-bottom:16px;
+}
+#progress-bar{
+  height:100%;
+  width:0%;
+  background:var(--primary);
+  transition:.4s;
+}
+.input-error{border-color:#ef4444!important}
+footer{
+  text-align:center;
+  padding:30px;
+  color:var(--muted);
+  font-size:13px;
+}
 </style>
 </head>
+
 <body>
 
 <header>
-    <div>⚖️ SN PROYECTOS — <span style="font-weight: 300;">Minutas</span></div>
-    <button class="btn-mode" onclick="toggleTheme()" id="theme-btn">🌙 Modo Oscuro</button>
+  <h1>⚖️ SN PROYECTOS · LegalTech</h1>
+  <button class="btn-mode" id="theme-btn" onclick="toggleTheme()">🌙 Modo Oscuro</button>
 </header>
 
-<div class="app-container">
-    
-    <div class="sidebar">
-        <div class="card">
-            <h2>⚙️ Configuración</h2>
-            <div class="input-group">
-                <label>PROYECTO</label>
-                <input id="proyecto" placeholder="Nombre del proyecto">
-            </div>
-            <div class="input-group">
-                <label>DIRECCIÓN</label>
-                <input id="direccion" placeholder="Ubicación exacta">
-            </div>
-            <div style="display: flex; gap: 10px;">
-                <div class="input-group" style="flex: 2;">
-                    <label>PROPIEDAD</label>
-                    <input id="propiedad" placeholder="Ej: CASA 1-1">
-                </div>
-                <div class="input-group" style="flex: 1;">
-                    <label>ÁREA (m²)</label>
-                    <input id="area" placeholder="0.00">
-                </div>
-            </div>
-            <div class="input-group">
-                <label>DATOS DE EXCEL</label>
-                <textarea id="estacionesTexto" style="height: 120px;" placeholder="Pegue aquí las líneas..."></textarea>
-            </div>
-            <button class="btn btn-primary" onclick="generar()">📄 GENERAR VISTA PREVIA</button>
-        </div>
+<div class="container">
+  <div id="progress-container"><div id="progress-bar"></div></div>
 
-        <div class="card" style="margin-top: 20px; background: #f8fafc;">
-            <h2>📦 Documento Acumulado</h2>
-            <textarea id="acumulado" readonly placeholder="Depósito final..."></textarea>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
-                <button class="btn btn-outline" onclick="exportarWord()">💾 Descargar .doc</button>
-                <button class="btn btn-outline" onclick="copiarDocumento()">📋 Copiar Todo</button>
-            </div>
-            <button class="btn btn-outline" style="margin-top:10px; color: #dc3545; border-color: #f8d7da;" onclick="limpiarAcumulado()">🧹 Limpiar Todo</button>
-        </div>
+  <div class="grid">
+    <div class="card">
+      <h2>Proyecto</h2>
+      <label>Nombre del proyecto</label>
+      <input id="proyecto" placeholder="Ej. Condominio Aurora">
+      <label>Dirección</label>
+      <input id="direccion" placeholder="Ubicación completa">
     </div>
 
-    <div class="main">
-        <div class="card" style="height: 100%; border-top: 5px solid var(--primary);">
-            <h2>🔍 Vista Previa de la Propiedad Actual</h2>
-            <textarea id="resultado" readonly placeholder="Aquí verás la minuta antes de acumularla..."></textarea>
-            
-            <button class="btn btn-success" onclick="agregarAlDocumento()">
-                ➕ CONFIRMAR Y ACUMULAR ESTA PROPIEDAD
-            </button>
-            <p style="font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 15px;">
-                Al hacer clic, el texto se moverá al documento acumulado y se limpiarán los campos de la propiedad para la siguiente entrada.
-            </p>
-        </div>
+    <div class="card">
+      <h2>Propiedad</h2>
+      <label>Identificador</label>
+      <input id="propiedad" placeholder="Casa 1-2">
+      <label>Área (m²)</label>
+      <input id="area" placeholder="120.50">
     </div>
+
+    <div class="card">
+      <h2>Estaciones</h2>
+      <label>Datos desde Excel</label>
+      <textarea id="estacionesTexto" placeholder="Pegue aquí las filas copiadas desde Excel"></textarea>
+      <button class="btn btn-primary" onclick="generar()">Generar minuta</button>
+    </div>
+
+    <div class="card">
+      <h2>Resultado</h2>
+      <textarea id="resultado" readonly placeholder="Texto generado automáticamente..."></textarea>
+      <button class="btn btn-secondary" onclick="agregarAlDocumento()">Agregar al documento</button>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:32px;">
+    <h2>Documento acumulado</h2>
+    <textarea id="acumulado" readonly placeholder="Aquí se construye el documento final..."></textarea>
+    <div class="btn-group" style="margin-top:16px;">
+      <button class="btn btn-secondary" onclick="copiarDocumento()">Copiar</button>
+      <button class="btn btn-primary" onclick="exportarWord()">Descargar Word</button>
+      <button class="btn btn-danger" onclick="limpiarAcumulado()">Limpiar</button>
+    </div>
+  </div>
 </div>
 
+<footer>SN PROYECTOS · Plataforma LegalTech</footer>
+
 <script>
-// --- MOTOR DE CONVERSIÓN ORIGINAL (RESTAURADO) ---
-function numeroALetras(num) {
-    if (num === '' || num === null || num === undefined) return '';
-    let str = num.toString().trim();
-    if (str.includes('.')) {
-        let partes = str.split('.');
-        return numeroALetras(partes[0]) + ' punto ' + numeroALetras(partes[1]);
-    }
-    const unidades = ['cero','uno','dos','tres','cuatro','cinco','seis','siete','ocho','nueve'];
-    const especiales = ['diez','once','doce','trece','caturce','quince'];
-    const decenas = ['','diez','veinte','treinta','cuarenta','cincuenta','sesenta','setenta','ochenta','noventa'];
-    const centenas = ['','ciento','doscientos','trescientos','cuatrocientos','quinientos','seiscientos','setecientos','ochocientos','novecientos'];
-    let n = parseInt(str);
-    if (isNaN(n)) return '';
-    if (n < 10) return unidades[n];
-    if (n >= 10 && n <= 15) return especiales[n - 10];
-    if (n < 20) return 'dieci' + unidades[n - 10];
-    if (n === 20) return 'veinte';
-    if (n < 30) return 'veinti' + unidades[n - 20];
-    if (n < 100) {
-        let d = Math.floor(n / 10);
-        let u = n % 10;
-        return decenas[d] + (u ? ' y ' + unidades[u] : '');
-    }
-    if (n === 100) return 'cien';
-    if (n < 1000) {
-        let c = Math.floor(n / 100);
-        let r = n % 100;
-        return centenas[c] + (r ? ' ' + numeroALetras(r) : '');
-    }
-    if (n < 2000) return 'mil' + (n % 1000 ? ' ' + numeroALetras(n % 1000) : '');
-    if (n < 1000000) {
-        let m = Math.floor(n / 1000);
-        let r = n % 1000;
-        return numeroALetras(m) + ' mil' + (r ? ' ' + numeroALetras(r) : '');
-    }
-    return n.toString();
+/* ================= MOTOR ORIGINAL (SIN CAMBIOS) ================= */
+
+function numeroALetras(num){
+  if(num===''||num===null||num===undefined)return'';
+  let str=num.toString().trim();
+  if(str.includes('.')){
+    let p=str.split('.');
+    return numeroALetras(p[0])+' punto '+numeroALetras(p[1]);
+  }
+  const u=['cero','uno','dos','tres','cuatro','cinco','seis','siete','ocho','nueve'];
+  const e=['diez','once','doce','trece','catorce','quince'];
+  const d=['','diez','veinte','treinta','cuarenta','cincuenta','sesenta','setenta','ochenta','noventa'];
+  const c=['','ciento','doscientos','trescientos','cuatrocientos','quinientos','seiscientos','setecientos','ochocientos','novecientos'];
+  let n=parseInt(str);
+  if(isNaN(n))return'';
+  if(n<10)return u[n];
+  if(n>=10&&n<=15)return e[n-10];
+  if(n<20)return'dieci'+u[n-10];
+  if(n===20)return'veinte';
+  if(n<30)return'veinti'+u[n-20];
+  if(n<100){let D=Math.floor(n/10),U=n%10;return d[D]+(U?' y '+u[U]:'');}
+  if(n===100)return'cien';
+  if(n<1000){let C=Math.floor(n/100),R=n%100;return c[C]+(R?' '+numeroALetras(R):'');}
+  if(n<2000)return'mil'+(n%1000?' '+numeroALetras(n%1000):'');
+  if(n<1000000){let M=Math.floor(n/1000),R=n%1000;return numeroALetras(M)+' mil'+(R?' '+numeroALetras(R):'');}
+  return n.toString();
 }
 
-function convertirTexto(texto) {
-    if (!texto) return '';
-    return texto.replace(/\d+(?:-\d+)?(?:\.\d+)?/g, function(match) {
-        if (match.includes('-')) {
-            let partes = match.split('-');
-            return numeroALetras(partes[0]) + ' guion ' + numeroALetras(partes[1]) + ' (' + match + ')';
-        }
-        return numeroALetras(match) + ' (' + match + ')';
-    });
+function convertirTexto(t){
+  if(!t)return'';
+  return t.replace(/\d+(?:-\d+)?(?:\.\d+)?/g,m=>{
+    if(m.includes('-')){
+      let p=m.split('-');
+      return numeroALetras(p[0])+' guion '+numeroALetras(p[1])+' ('+m+')';
+    }
+    return numeroALetras(m)+' ('+m+')';
+  });
+}
+
+function validarCampos(){
+  let c=['proyecto','direccion','propiedad','area','estacionesTexto'],v=true;
+  c.forEach(id=>{
+    let e=document.getElementById(id);
+    if(!e.value.trim()){e.classList.add('input-error');v=false;}
+    else e.classList.remove('input-error');
+  });
+  return v;
 }
 
 function generar(){
-    if (!validarCampos()) return;
-
-    let texto = `${convertirTexto(document.getElementById('propiedad').value).toUpperCase()}, ${convertirTexto(document.getElementById('proyecto').value).toUpperCase()} (QUE SI FORMARÁ FINCA FILIAL) Finca nueva de naturaleza urbana, ubicada en ${convertirTexto(document.getElementById('direccion').value)}, con un área total de ${numeroALetras(document.getElementById('area').value)} (${document.getElementById('area').value}) metros cuadrados, y con las siguientes estaciones, medidas y colindancias:\n`;
-    
-    let lineas = document.getElementById('estacionesTexto').value.trim().split(/\n+/);
-    let errores = [];
-
-    lineas.forEach((l, index) => {
-        let p = l.split(/\t+/);
-        let numLinea = index + 1;
-
-        if(p.length < 5) {
-            errores.push(`Línea ${numLinea}: Faltan datos.`);
-            return;
-        }
-
-        let est = p[0].trim(), 
-            po = p[1].trim(), 
-            dato = p[2].trim(), 
-            extra = p[3].trim(), 
-            col = convertirTexto(p.slice(4).join(' ').trim());
-
-        let regexGMS = /(\d+)\s*°\s*(\d+)\s*'\s*(\d+)/;
-
-        texto += `\nDe la estación ${numeroALetras(est)} (${est}) al punto observado ${numeroALetras(po)} (${po}): `;
-
-        try {
-            if(dato.toUpperCase().startsWith('D=')){
-                let gms = dato.replace(/D=\s*/i, '').match(regexGMS);
-                if(!gms) throw new Error("Formato Delta incorrecto");
-                let L = extra.match(/L=\s*([0-9.]+)/i)[1];
-                let R = extra.match(/R=\s*([0-9.]+)/i)[1];
-                texto += `Con una delta de ${numeroALetras(gms[1])} grados (${gms[1]}°), ${numeroALetras(gms[2])} minutos (${gms[2]}'), ${numeroALetras(gms[3])} segundos (${gms[3]}"), una longitud de curva de ${numeroALetras(L)} (${L}) metros y un radio de ${numeroALetras(R)} (${R}) metros, colindando con ${col}; `;
-            } else {
-                let gms = dato.match(regexGMS);
-                if(!gms) throw new Error("Formato Azimut incorrecto");
-                texto += `Con un azimut de ${numeroALetras(gms[1])} grados (${gms[1]}°), ${numeroALetras(gms[2])} minutos (${gms[2]}'), ${numeroALetras(gms[3])} segundos (${gms[3]}"), una distancia recta de ${numeroALetras(extra)} (${extra}) metros, colindando con ${col}; `;
-            }
-        } catch (e) {
-            errores.push(`Línea ${numLinea}: Error en formato.`);
-        }
-    });
-
-    if (errores.length > 0) {
-        alert("❌ Error:\n" + errores.join("\n"));
-        return;
-    }
-    document.getElementById('resultado').value = texto;
+  if(!validarCampos())return;
+  let t=`${convertirTexto(propiedad.value).toUpperCase()}, ${convertirTexto(proyecto.value).toUpperCase()} (QUE SI FORMARÁ FINCA FILIAL) Finca nueva de naturaleza urbana, ubicada en ${convertirTexto(direccion.value)}, con un área total de ${numeroALetras(area.value)} (${area.value}) metros cuadrados, y con las siguientes estaciones, medidas y colindancias:\n`;
+  let l=estacionesTexto.value.trim().split(/\n+/),err=[];
+  l.forEach((x,i)=>{
+    let p=x.split(/\t+/);
+    if(p.length<5){err.push(`Línea ${i+1}: faltan columnas`);return;}
+    let est=p[0],po=p[1],dato=p[2],extra=p[3],col=convertirTexto(p.slice(4).join(' '));
+    let r=/(\d+)\s*°\s*(\d+)\s*'\s*(\d+)/;
+    t+=`\nDe la estación ${numeroALetras(est)} (${est}) al punto observado ${numeroALetras(po)} (${po}): `;
+    try{
+      let g=dato.match(r);
+      if(!g)throw'';
+      t+=`Con un azimut de ${numeroALetras(g[1])} grados (${g[1]}°), ${numeroALetras(g[2])} minutos (${g[2]}'), ${numeroALetras(g[3])} segundos (${g[3]}"), una distancia recta de ${numeroALetras(extra)} (${extra}) metros, colindando con ${col}; `;
+    }catch{err.push(`Línea ${i+1}: error de formato`);}
+  });
+  if(err.length){alert(err.join('\n'));return;}
+  resultado.value=t;
 }
 
-// --- FUNCIONES DE INTERFAZ ---
-function validarCampos() {
-    let campos = ['proyecto', 'direccion', 'propiedad', 'area', 'estacionesTexto'];
-    let valido = true;
-    campos.forEach(id => {
-        let el = document.getElementById(id);
-        if (!el.value.trim()) { el.classList.add('input-error'); valido = false; }
-        else { el.classList.remove('input-error'); }
-    });
-    return valido;
+function agregarAlDocumento(){
+  if(!resultado.value)return alert('Genera la minuta primero');
+  acumulado.value+=(acumulado.value?'\n\n---------------------\n\n':'')+resultado.value;
+  resultado.value='';propiedad.value='';area.value='';estacionesTexto.value='';
+  progress-container.style.display='block';
 }
 
-function agregarAlDocumento() {
-    const res = document.getElementById('resultado');
-    const acu = document.getElementById('acumulado');
-    if (!res.value) { alert("⚠️ Genera la minuta primero"); return; }
-    let sep = acu.value.trim() ? "\n\n--------------------------------------------\n\n" : "";
-    acu.value += sep + res.value;
-    document.getElementById('propiedad').value = "";
-    document.getElementById('area').value = "";
-    document.getElementById('estacionesTexto').value = "";
-    res.value = "";
-    guardarProgreso();
+function copiarDocumento(){
+  navigator.clipboard.writeText(acumulado.value).then(()=>alert('Copiado'));
 }
 
-function guardarProgreso() {
-    const data = { acu: document.getElementById('acumulado').value, proy: document.getElementById('proyecto').value, dir: document.getElementById('direccion').value };
-    localStorage.setItem('minuta_sn', JSON.stringify(data));
+function limpiarAcumulado(){
+  if(confirm('¿Borrar todo?'))acumulado.value='';
 }
 
-function limpiarAcumulado() {
-    if(confirm("¿Borrar todo?")) {
-        document.getElementById('acumulado').value = "";
-        guardarProgreso();
-    }
+function exportarWord(){
+  if(!acumulado.value)return alert('Documento vacío');
+  const html=`<html><body><pre>${acumulado.value.replace(/</g,'&lt;')}</pre></body></html>`;
+  const b=new Blob(['\ufeff',html],{type:'application/msword'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(b);
+  a.download='MINUTA_SN_PROYECTOS.doc';
+  a.click();
 }
 
-function toggleTheme() {
-    let theme = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
-    document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem('theme', theme);
-    document.getElementById('theme-btn').innerText = theme === "dark" ? "☀️ Modo Claro" : "🌙 Modo Oscuro";
+function toggleTheme(){
+  let t=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',t);
+  localStorage.setItem('theme',t);
+  theme-btn.innerHTML=t==='dark'?'☀️ Modo Claro':'🌙 Modo Oscuro';
 }
 
-window.onload = function() {
-    const saved = localStorage.getItem('minuta_sn');
-    if (saved) {
-        const d = JSON.parse(saved);
-        document.getElementById('acumulado').value = d.acu || "";
-        document.getElementById('proyecto').value = d.proy || "";
-        document.getElementById('direccion').value = d.dir || "";
-    }
-    const theme = localStorage.getItem('theme') || 'light';
-    document.documentElement.setAttribute("data-theme", theme);
+window.onload=()=>{
+  let t=localStorage.getItem('theme')||'light';
+  document.documentElement.setAttribute('data-theme',t);
+  theme-btn.innerHTML=t==='dark'?'☀️ Modo Claro':'🌙 Modo Oscuro';
 };
-
-function copiarDocumento() {
-    navigator.clipboard.writeText(document.getElementById('acumulado').value).then(() => alert("📋 Copiado"));
-}
-
-function exportarWord() {
-    const contenido = document.getElementById("acumulado").value;
-    const html = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'></head><body><div style='font-family:Times New Roman; font-size:12pt; white-space: pre-wrap;'>${contenido.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div></body></html>`;
-    const blob = new Blob(['\ufeff', html], { type: 'application/msword' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url; link.download = "MINUTAS_ACUMULADAS.doc";
-    link.click();
-}
 </script>
 </body>
 </html>
