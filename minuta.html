@@ -94,6 +94,23 @@ button {
     animation: slideIn 0.3s ease;
 }
 @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+    /* Estado de error para los inputs */
+.input-error {
+    border-color: #ef4444 !important; /* Rojo vibrante */
+    background-color: #fef2f2 !important; /* Fondo rojizo muy suave */
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1) !important;
+}
+
+/* Opcional: animación de sacudida para indicar error */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.shake {
+    animation: shake 0.2s ease-in-out 0s 2;
+}
 </style>
 </head>
 <body>
@@ -278,13 +295,29 @@ function updateThemeBtn(theme) {
 }
 
 function validarCampos() {
+function validarCampos() {
+    // Lista de IDs que deben estar llenos
     let campos = ['proyecto', 'direccion', 'propiedad', 'area', 'estacionesTexto'];
     let valido = true;
+    
     campos.forEach(id => {
         let el = document.getElementById(id);
-        if (!el.value.trim()) { el.classList.add('input-error'); valido = false; }
-        else { el.classList.remove('input-error'); }
+        if (!el.value.trim()) { 
+            el.classList.add('input-error'); // Pone el borde rojo
+            el.classList.add('shake');      // Le da un pequeño movimiento
+            valido = false; 
+            
+            // Quita la sacudida después de que termine la animación
+            setTimeout(() => el.classList.remove('shake'), 400);
+        } else { 
+            el.classList.remove('input-error'); 
+        }
     });
+
+    if (!valido) {
+        mostrarNotificacion("⚠️ Por favor, completa los campos resaltados");
+    }
+    
     return valido;
 }
 
@@ -358,14 +391,58 @@ function copiarDocumento() {
 }
 
 function exportarWord() {
+    // Tomamos el contenido del acumulado (el texto real)
     const contenido = document.getElementById("acumulado").value;
-    if (!contenido) return alert("Documento vacío");
-    const html = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'></head><body><div style='font-family:Times New Roman; font-size:12pt; white-space: pre-wrap;'>${contenido.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div></body></html>`;
+    
+    if (!contenido) {
+        mostrarNotificacion("⚠️ El documento está vacío");
+        return;
+    }
+
+    // Nombre del proyecto para el nombre del archivo
+    const nombreProy = document.getElementById('proyecto').value || "MINUTA";
+    const nombreArchivo = `MINUTA_${nombreProy.toUpperCase()}.doc`;
+
+    // Estructura HTML profesional para Word (incluye márgenes y fuentes)
+    const html = `
+    <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+    <head>
+        <meta charset='utf-8'>
+        <style>
+            @page Section1 {
+                size: 8.5in 11in; /* Tamaño Carta */
+                margin: 1in 1.25in 1in 1.25in; /* Márgenes estándar */
+                mso-header-margin: .5in;
+                mso-footer-margin: .5in;
+                mso-paper-source: 0;
+            }
+            div.Section1 { page: Section1; }
+            body {
+                font-family: 'Times New Roman', serif;
+                font-size: 12pt;
+                text-align: justify;
+                line-height: 1.5;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="Section1">
+            ${contenido.replace(/\n/g, '<br>')}
+        </div>
+    </body>
+    </html>`;
+
+    // Crear el archivo y descargarlo
     const blob = new Blob(['\ufeff', html], { type: 'application/msword' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
-    link.href = url; link.download = "MINUTA_SN_PROYECTOS.doc";
+    link.href = url;
+    link.download = nombreArchivo;
+    document.body.appendChild(link); // Necesario en algunos navegadores
     link.click();
+    document.body.removeChild(link);
+    
+    mostrarNotificacion("💾 Documento Word descargado");
 }
 function mostrarNotificacion(msj) {
     const t = document.getElementById('toast');
